@@ -1,10 +1,8 @@
-# Twitter-Data-Analysis
-Análise de dados do Twitter
+## Projeto: Banco Carrefour Data Challenge: Análise Trend Topics
 
 ![nuvem](https://github.com/rodglins/Twitter-Data-Analysis/blob/master/nuvem.png)
 
 
-## Projeto: Desafio Carrefour Análise Trend Topics
 
 Twitter Nuvem de palavras
 
