@@ -1,0 +1,51 @@
+21/09/21 21:14:51 INFO org.sparkproject.jetty.util.log: Logging initialized @3338ms to org.sparkproject.jetty.util.log.Slf4jLog
+21/09/21 21:14:51 INFO org.sparkproject.jetty.server.Server: jetty-9.4.40.v20210413; built: 2021-04-13T20:42:42.668Z; git: b881a572662e1943a14ae12e7e1207989f218b74; jvm 1.8.0_292-b10
+21/09/21 21:14:51 INFO org.sparkproject.jetty.server.Server: Started @3467ms
+21/09/21 21:14:51 INFO org.sparkproject.jetty.server.AbstractConnector: Started ServerConnector@38326d99{HTTP/1.1, (http/1.1)}{0.0.0.0:34957}
+21/09/21 21:14:51 INFO org.apache.hadoop.yarn.client.RMProxy: Connecting to ResourceManager at cluster-rodglins-m/10.128.0.6:8032
+21/09/21 21:14:52 INFO org.apache.hadoop.yarn.client.AHSProxy: Connecting to Application History server at cluster-rodglins-m/10.128.0.6:10200
+21/09/21 21:14:52 INFO org.apache.hadoop.conf.Configuration: resource-types.xml not found
+21/09/21 21:14:52 INFO org.apache.hadoop.yarn.util.resource.ResourceUtils: Unable to find 'resource-types.xml'.
+21/09/21 21:14:53 INFO org.apache.hadoop.yarn.client.api.impl.YarnClientImpl: Submitted application application_1632172312677_0005
+21/09/21 21:14:54 INFO org.apache.hadoop.yarn.client.RMProxy: Connecting to ResourceManager at cluster-rodglins-m/10.128.0.6:8030
+21/09/21 21:14:56 INFO com.google.cloud.hadoop.repackaged.gcs.com.google.cloud.hadoop.gcsio.GoogleCloudStorageImpl: Ignoring exception of type GoogleJsonResponseException; verified object already exists with desired state.
+Traceback (most recent call last):
+  File "/tmp/job-5b2b0ee5/trend_analysis_spark.py", line 25, in <module>
+    add=tweet.reduceByKey(lambda x,y:x+y)
+  File "/usr/lib/spark/python/lib/pyspark.zip/pyspark/rdd.py", line 1891, in reduceByKey
+  File "/usr/lib/spark/python/lib/pyspark.zip/pyspark/rdd.py", line 2136, in combineByKey
+  File "/usr/lib/spark/python/lib/pyspark.zip/pyspark/rdd.py", line 2581, in _defaultReducePartitions
+  File "/usr/lib/spark/python/lib/pyspark.zip/pyspark/rdd.py", line 2935, in getNumPartitions
+  File "/usr/lib/spark/python/lib/py4j-0.10.9-src.zip/py4j/java_gateway.py", line 1304, in __call__
+  File "/usr/lib/spark/python/lib/py4j-0.10.9-src.zip/py4j/protocol.py", line 326, in get_return_value
+py4j.protocol.Py4JJavaError: An error occurred while calling o49.partitions.
+: java.lang.IllegalArgumentException: Wrong FS: file://trend_data_day*/tmp/job-5b2b0ee5, expected: file:///
+	at org.apache.hadoop.fs.FileSystem.checkPath(FileSystem.java:738)
+	at org.apache.hadoop.fs.RawLocalFileSystem.pathToFile(RawLocalFileSystem.java:89)
+	at org.apache.hadoop.fs.RawLocalFileSystem.deprecatedGetFileStatus(RawLocalFileSystem.java:663)
+	at org.apache.hadoop.fs.RawLocalFileSystem.getFileLinkStatusInternal(RawLocalFileSystem.java:989)
+	at org.apache.hadoop.fs.RawLocalFileSystem.getFileStatus(RawLocalFileSystem.java:658)
+	at org.apache.hadoop.fs.FilterFileSystem.getFileStatus(FilterFileSystem.java:458)
+	at org.apache.hadoop.fs.Globber.getFileStatus(Globber.java:65)
+	at org.apache.hadoop.fs.Globber.doGlob(Globber.java:281)
+	at org.apache.hadoop.fs.Globber.glob(Globber.java:149)
+	at org.apache.hadoop.fs.FileSystem.globStatus(FileSystem.java:2069)
+	at org.apache.hadoop.mapred.LocatedFileStatusFetcher$ProcessInitialInputPathCallable.call(LocatedFileStatusFetcher.java:312)
+	at org.apache.hadoop.mapred.LocatedFileStatusFetcher$ProcessInitialInputPathCallable.call(LocatedFileStatusFetcher.java:293)
+	at com.google.common.util.concurrent.TrustedListenableFutureTask$TrustedFutureInterruptibleTask.runInterruptibly(TrustedListenableFutureTask.java:125)
+	at com.google.common.util.concurrent.InterruptibleTask.run(InterruptibleTask.java:69)
+	at com.google.common.util.concurrent.TrustedListenableFutureTask.run(TrustedListenableFutureTask.java:78)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1149)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:624)
+	at java.lang.Thread.run(Thread.java:748)
+
+21/09/21 21:14:57 WARN org.apache.hadoop.util.concurrent.ExecutorHelper: Thread (Thread[GetFileInfo #0,5,main]) interrupted: 
+java.lang.InterruptedException
+	at com.google.common.util.concurrent.AbstractFuture.get(AbstractFuture.java:510)
+	at com.google.common.util.concurrent.FluentFuture$TrustedFuture.get(FluentFuture.java:88)
+	at org.apache.hadoop.util.concurrent.ExecutorHelper.logThrowableFromAfterExecute(ExecutorHelper.java:48)
+	at org.apache.hadoop.util.concurrent.HadoopThreadPoolExecutor.afterExecute(HadoopThreadPoolExecutor.java:90)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1157)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:624)
+	at java.lang.Thread.run(Thread.java:748)
+21/09/21 21:14:57 INFO org.sparkproject.jetty.server.AbstractConnector: Stopped Spark@38326d99{HTTP/1.1, (http/1.1)}{0.0.0.0:0}

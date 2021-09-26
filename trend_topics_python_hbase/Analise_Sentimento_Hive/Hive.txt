@@ -1,0 +1,57 @@
+Requisitos:
+
+Spark, Scala, and Pyspark
+
+
+
+
+Análise de sentimento:
+
+//Table to Store Twitter JSON Data.
+CREATE EXTERNAL TABLE raw_tweets(id BIGINT,created_at STRING,source STRING,favorited BOOLEAN, retweeted_status STRUCT<text:STRING, `user` :STRUCT<screen_name:STRING,name:STRING>,retweet_count:INT>,text STRING,entities STRUCT<hashtags:ARRAY<STRUCT<text:STRING>>>,`user` STRUCT<screen_name:STRING,friends_count:INT,followers_count:INT,statuses_count:INT,verified:BOOLEAN,utc_offset:INT,time_zone:STRING>,in_reply_to_screen_name STRING)
+ROW FORMAT SERDE 'org.apache.hive.hcatalog.data.JsonSerDe';
+
+// Load the data from HDFS Path to the above created Table.
+load data inpath '/twitter.json' into TABLE raw_tweets;
+
+//Divide text into words.
+create view temp_1 as select id,raw_tweets.text, words from raw_tweets lateral view explode(sentences(lower(text))) dummy as words;
+
+//Divide words into single word row.
+create view temp_2 as select id,temp_1.text, word from temp_1 lateral view explode( words ) dummy as word ;
+
+//Calculate Polarity by joining with dictionary.
+create view temp_3 as select
+    id,temp_2.text,
+    temp_2.word,
+    case s_d.polarity
+      when  'negative' then -1
+      when 'positive' then 1
+      else 0 end as polarity
+ from temp_2 left outer join dictionary s_d on temp_2.word = s_d.word;
+
+
+//Sum single word polarity value for every single user based on UsedId and assign sentiment.
+create table tweets_sent_final stored as orc as select
+  id,
+    case
+    when sum(polarity) > 0 then 'positive'
+    when sum(polarity) < 0 then 'negative'
+    else 'neutral' end as sentiment,text
+ from temp_3 group by id, text;
+
+
+
+//View to filter only the hashtags text.
+create view hash1 as select id, entities.hashtags.text as words from raw_tweet;
+//Split multiple hashtags into single hashtags.
+create view hash2 as select id, word from hash1 lateral view explode( words ) dummy as word ;
+//Count and store the trends in the final table.
+create table tweets_Trend_final stored as orc as select count(*) as count from hash2 group by word order by count; 	
+
+
+
+# Exportando dados:
+
+sudo hive -e 'set Hive.cli.print.header=true; select * from tweets_Trend_final' | sed 's/[\t]/,/g'  > /hive.csv
+

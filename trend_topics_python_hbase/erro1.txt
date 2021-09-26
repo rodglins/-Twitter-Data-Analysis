@@ -1,0 +1,4 @@
+sc.textFile("file:// *") "NameError: name 'sc' is not defined"
+
+from pyspark import SparkContext
+sc =SparkContext()
