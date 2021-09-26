@@ -1,6 +1,10 @@
 # Twitter-Data-Analysis
 Análise de dados do Twitter
 
+![nuvem](https://github.com/rodglins/Twitter-Data-Analysis/blob/master/nuvem.png)
+
+Twitter-Data-Analysis/nuvem.png
+
 ## Projeto: Desafio Carrefour Análise Trend Topics
 
 Twitter Nuvem de palavras
