@@ -8,7 +8,7 @@ Twitter Nuvem de palavras
 
 Twitter trend topics PySpark MongoDB
 
-Twitter trend topics Flume HBase
+Twitter trend topics Flume HBase (Beta)
 
 Análise em Python / PowerBI
 
