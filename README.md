@@ -1,4 +1,4 @@
-## Projeto: Banco Carrefour Data Challenge: Análise Trend Topics
+# Projeto: Banco Carrefour Data Challenge: Análise Trend Topics
 
 ![nuvem](https://github.com/rodglins/Twitter-Data-Analysis/blob/master/nuvem.png)
 
@@ -14,7 +14,7 @@ Análise em Python / PowerBI
 
 -------------
 
-Por que MongoDB ou HBase?
+### Por que MongoDB ou HBase?
 
 São duas ótimas base de dados NoSQL e devem ser escolhidas conforme ambiente de trabalho e necessidade de uso. Enquanto a HBase é ótima em desempenho a MongoDB é excelente para aplicaões online. Abaixo uma comparação:
 
