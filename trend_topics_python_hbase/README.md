@@ -697,6 +697,31 @@ gcloud dataproc clusters start cluster-0910 --region=us-central1
 
 
 ---
+         
+ERRO: NoNode
+      
+
+olindaglins@cluster-0910-m:/usr/lib/zookeeper$ bin/zkServer.sh start
+ZooKeeper JMX enabled by default
+Using config: /usr/lib/zookeeper/bin/../conf/zoo.cfg
+Starting zookeeper ... bin/zkServer.sh: line 140: ./zookeeper.out: Permission denied
+bin/zkServer.sh: line 149: /var/lib/zookeeper/zookeeper_server.pid: Permission denied
+FAILED TO WRITE PID
+olindaglins@cluster-0910-m:/usr/lib/zookeeper$ sudo bin/zkServer.sh start
+ZooKeeper JMX enabled by default
+Using config: /usr/lib/zookeeper/bin/../conf/zoo.cfg
+Starting zookeeper ... STARTED
+olindaglins@cluster-0910-m:/usr/lib/zookeeper$ 
+
+
+cd /opt/zookeeper
+ bin/zkServer.sh start
+
+sudo bin/ zkServer.sh restart
+         
+       
+         
+  
 
 
 
