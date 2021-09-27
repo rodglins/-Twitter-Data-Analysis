@@ -6,7 +6,9 @@ Projeto: Análise twitter utilizando Hbase, Zookeper, Dataproc, Spark
 ### Criando um projeto:
 
 projeto>>>> dataprocRodglins
+
 Cluster>>>>cluster-rodglins
+
 Cluster>>>>cluster-0910
 
 Criando um bucket:
@@ -335,30 +337,30 @@ hive-log4j2.properties              parquet-logging.properties
 ----
 
 
-# Criando uma tabela no HBase:
-# Antes de inserir os dados a tabela tem que existir
+## Criando uma tabela no HBase:
+Antes de inserir os dados a tabela tem que existir
 
 
-# iniciar
+### iniciar
 hbase shell
 
-# Criar tabela
+### Criar tabela
 create 'twt_table', 'twt_cf'
 
-# Acessando a tabela:
+### Acessando a tabela:
 use 'twt_table'
 
-# verificar conteúdo:
+### verificar conteúdo:
 scan 'twt_table'
 
-# limpar dados da tabela
+### limpar dados da tabela
 truncate 'twt_table'
 
-# iniciando o hbase
+### iniciando o hbase
 hbase master start
 
 
-# Para exportar:
+### Para exportar:
 
 Take snapshot of the table
 $ ./bin/hbase shell
@@ -378,18 +380,18 @@ $ bin/hadoop jar <path/to/hbase-{version}.jar> export \
 
 ----
 
-Editando arquivo .conf na pasta conf
+## Editando arquivo .conf na pasta conf
 
 Flume:
 vim flume.conf
 
-#HBaseSink (org.apache.flume.sink.hbase.HBaseSink) supports secure HBase clusters and also the novel HBase IPC that was introduced in the version HBase 0.96.
-#AsyncHBaseSink (org.apache.flume.sink.hbase.AsyncHBaseSink) has better performance than HBase sink as it can easily make non-blocking calls to HBase.
+### HBaseSink (org.apache.flume.sink.hbase.HBaseSink) supports secure HBase clusters and also the novel HBase IPC that was introduced in the version HBase 0.96.
+### AsyncHBaseSink (org.apache.flume.sink.hbase.AsyncHBaseSink) has better performance than HBase sink as it can easily make non-blocking calls to HBase.
 
-# ERRO: Versão incompatível, utilizar: HBase2Sink
+ERRO: Versão incompatível, utilizar: HBase2Sink
 
 
-HBase2Sink
+### HBase2Sink
 HBase2Sink is the equivalent of HBaseSink for HBase version 2. The provided functionality and the configuration parameters are the same as in case of HBaseSink (except the hbase2 tag in the sink type and the package/class names).
 a1.channels = c1
 a1.sinks = k1
@@ -399,7 +401,7 @@ a1.sinks.k1.columnFamily = bar_cf
 a1.sinks.k1.serializer = org.apache.flume.sink.hbase2.RegexHBase2EventSerializer
 a1.sinks.k1.channel = c1
 
-Twitter 1% firehose Source (experimental)
+### Twitter 1% firehose Source (experimental)
 a1.sources = r1
 a1.channels = c1
 a1.sources.r1.type = org.apache.flume.source.twitter.TwitterSource
@@ -411,7 +413,7 @@ a1.sources.r1.accessTokenSecret = YOUR_TWITTER_ACCESS_TOKEN_SECRET
 a1.sources.r1.maxBatchSize = 10
 a1.sources.r1.maxBatchDurationMillis = 200
 
-Flume Channels
+## Flume Channels
 a1.channels = c1
 a1.channels.c1.type = memory
 a1.channels.c1.capacity = 10000
@@ -434,20 +436,19 @@ twtagent.sinks.hbaseSink.serializer.incrementColumn=col1
 twtagent.sinks.hbaseSink.serializer.rowPrefix=1+
 twtagent.sinks.hbaseSink.serializer.suffix=timestamp
 
----------
 
-# Iniciando o agente Flume:
 
-Testes:
+### Iniciando o agente Flume:
+
+## Testes nos clusters rodglins e 0910
 
 ./bin/flume-ng agent --conf ./conf --conf-file ./conf/twitter-flume-hdfs.conf --name twtagent -Dflume.root.logger=INFO,console
 
-ERRO:
+## ERRO:
 /usr/lib/hadoop/libexec//hadoop-functions.sh: line 2460: HADOOP_ORG.APACHE.HADOOP.HBASE.UTIL.GETJAVAPROP
 ERTY_OPTS: bad substitution
 
 ./bin/flume-ng agent -f conf/twitter-flume-hdfs.conf -c conf -n twtagent
-
 
 /bin/flume-ng agent -n twtagent -c conf -f conf/twitter-flume-hdfs.conf -Dflume.root.logger=INFO,console
 
@@ -471,33 +472,16 @@ ERTY_OPTS: bad substitution
 
 ~/flume/bin/flume-ng agent --conf ~/flume/conf -f ~/flume/conf/flume.conf -Dflume.root.logger=DEBUG,console -n twtagent
 
-# Erro na execução do flume, ajustar linha de comando
+### Erro na execução do flume, ajustar linha de comando
 09-24 20:34:58,101 INFO client.RpcRetryingCallerImpl: Call exception, tries=12, retries=16, started=68495 m
 s ago, cancelled=false, msg=java.io.IOException: org.apache.hadoop.hbase.shaded.org.apache.zookeeper.KeeperExcep
 tion$NoNodeException: KeeperErrorCode = NoNode for /hbase/master, details=, see https://s.apache.org/timeout
 
 
-# esse le mas nao grava
-~/flume/bin/flume-ng agent --conf ~/flume/conf -f ~/flume/conf/flume.conf -Dflume.root.logger=DEBUG,console -n twtagent
-
-# grava mas não le:
-~/flume/bin/flume-ng agent --conf conf --conf-file flume.conf --name twtagent -Dflume.root.logger=INFO,console
-
-teste1
-~/flume/bin/flume-ng agent --conf ~/flume/conf -f ~/flume/conf/flume.conf --name twtagent -Dflume.root.logger=DEBUG,console
-2
-~/flume/bin/flume-ng agent --conf conf --conf-file flume.conf --name twtagent -Dflume.root.logger=DEBUG,console
-3
-~/flume/bin/flume-ng agent --conf ~/flume/conf --conf-file flume.conf --name twtagent -Dflume.root.logger=DEBUG,console
-4
-
-~/flume/bin/flume-ng agent –conf ~/flume/conf/flume.conf -z cluster-0910-m:2181,cluster-0910-m:2181 -p ~/flume –name a1 -Dflume.root.logger=INFO,console
-
-
 ------
 
 
-# Erro duplicação: Estes arquivos não podem ser duplicados no sistema:
+### Erro duplicação: Estes arquivos não podem ser duplicados no sistema:
 /home/olindaglins/flume/lib/slf4j-log4j12-1.7.25.jar
 
 -- error:
@@ -522,13 +506,13 @@ SLF4J: Found binding in [jar:file:/slf4j-log4j12-1.7.25.jar!/org/slf4j/impl/Stat
 ---
 
 
-# erro: Flume Twitter: Could not configure channel MemChannel
+### erro: Flume Twitter: Could not configure channel MemChannel
 Solução: 
 erros no MemChannel, verificar existem e se estão corretos
 
 ------
 
-# Erro de versão:
+### Erro de versão:
 Solução:
 wget http://files.cloudera.com/samples/flume-sources-1.0-SNAPSHOT.jar
 
@@ -540,7 +524,7 @@ wget http://files.cloudera.com/samples/flume-sources-1.0-SNAPSHOT.jar
 
 
 
-Erro: Flume agent failed because dependencies were not found in classpath
+## Erro: Flume agent failed because dependencies were not found in classpath
 Resolvido
 
 copied comon jar files from hadoop folder to the flume folder.
@@ -571,7 +555,7 @@ https://community.cloudera.com/t5/Support-Questions/Flume-Exception-in-thread-qu
 https://twittercommunity.com/t/exception-in-thread-twitter4j-async-dispatcher-0-while-fetching-tweets-using-flume/91895/5
 
 
-# Resolvendo erros, adicionando:
+### Resolvendo erros, adicionando:
 export JAVA_HOME=/usr/lib/jvm/adoptopenjdk-8-hotspot-amd64
 export JAVA_OPTS="-Xms100m -Xmx2000m -Dcom.sun.management.jmxremote"
 FLUME_CLASSPATH="/lib/*"
@@ -579,7 +563,7 @@ export HIVE_HOME=/usr/lib/hive
 export HCAT_HOME=/usr/lib/hive-hcatalog
 
 
-# Testando flume
+### Testando flume
 flume-ng agent -n twtagent --conf /conf -f /conf/flume.conf -Dflume.root.logger=DEBUG,console -Dtwitter4j.streamBaseURL=https://stream.twitter.com/1.1/
 
 Erro:
@@ -593,7 +577,7 @@ https://stackoverflow.com/questions/50349540/getting-java-lang-outofmemoryerror-
 
 ------
 
-# Atualizando versão Python de 2.2 para 3.8
+### Atualizando versão Python de 2.2 para 3.8
 
 Miniconda3-py38_4.10.3-Linux-x86_64.sh
 /opt/conda/miniconda3/bin/python
@@ -607,7 +591,7 @@ sudo ln -sf /opt/conda/default/bin/python /opt/conda/default/bin/python3
 
 
 
-# Erro versão incompatível, substituindo arquivos:
+### Erro versão incompatível, substituindo arquivos:
 sudo gsutil mv gs://rodglinstwitter/flume-sources-1.0-SNAPSHOT.jar /lib
 sudo gsutil mv gs://rodglinstwitter/twitter4j-core-2.2.6.jar /lib
 sudo gsutil mv gs://rodglinstwitter/twitter4j-media-support-2.2.6.jar /lib
@@ -615,7 +599,7 @@ sudo gsutil mv gs://rodglinstwitter/twitter4j-stream-2.2.6.jar /lib
 
 
 
-# Duplicidade:
+### Duplicidade:
 
 SLF4J
 
@@ -637,7 +621,7 @@ sudo mv slf4j-log4j12-1.7.25.jar slf4j-log4j12-1.7.25.jar.RENOMEADO
 
 
 ----
-ERRO:
+### ERRO:
 
 Page up
         at java.lang.StringBuilder.append(StringBuilder.java:190)
@@ -678,15 +662,38 @@ R: bad substitution
 /usr/lib/hadoop/libexec//hadoop-functions.sh: line 2460: HADOOP_ORG.APACHE.HADOOP.HBASE.UTIL.GETJAVAPROPERTY_OPT
 S: bad substitution
 
-# Resolvido
+### Resolvido
 
 ---
 
-# Verificando status do cluster:
+### Verificando status do cluster:
 gcloud dataproc clusters diagnose cluster-0910 --region=us-central1
 
-# Iniciando o cluster:
+### Iniciando o cluster:
 gcloud dataproc clusters start cluster-0910 --region=us-central1
+         
+         
+## Mais testes agente flume      
+         
+
+
+### esse le mas nao grava
+~/flume/bin/flume-ng agent --conf ~/flume/conf -f ~/flume/conf/flume.conf -Dflume.root.logger=DEBUG,console -n twtagent
+
+### grava mas não le:
+~/flume/bin/flume-ng agent --conf conf --conf-file flume.conf --name twtagent -Dflume.root.logger=INFO,console
+
+         
+### mais testes
+~/flume/bin/flume-ng agent --conf ~/flume/conf -f ~/flume/conf/flume.conf --name twtagent -Dflume.root.logger=DEBUG,console
+2
+~/flume/bin/flume-ng agent --conf conf --conf-file flume.conf --name twtagent -Dflume.root.logger=DEBUG,console
+3
+~/flume/bin/flume-ng agent --conf ~/flume/conf --conf-file flume.conf --name twtagent -Dflume.root.logger=DEBUG,console
+4
+
+~/flume/bin/flume-ng agent –conf ~/flume/conf/flume.conf -z cluster-0910-m:2181,cluster-0910-m:2181 -p ~/flume –name a1 -Dflume.root.logger=INFO,console
+
 
 
 ---
